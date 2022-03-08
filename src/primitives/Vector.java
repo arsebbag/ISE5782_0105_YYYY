@@ -34,7 +34,7 @@ public class Vector extends Point{
      * @throws if the point is the origin (0,0,0)
      */
     public Vector(Point otherPoint) {
-        super(otherPoint.coordinate.d1, otherPoint.coordinate.d2, otherPoint.coordinate.d3);
+        super(otherPoint.coordinate._d1, otherPoint.coordinate._d2, otherPoint.coordinate._d3);
         if(otherPoint.equals(Double3.ZERO)) {
             throw new IllegalArgumentException("The point is the origin point which can not be used to describe a vector.");
         }
@@ -61,7 +61,7 @@ public class Vector extends Point{
      */
     //public Point getHead() {return _head;}
 
-    public Point getHead() {return new Point(this.coordinate.d1, this.coordinate.d2, this.coordinate.d3);}
+    public Point getHead() {return new Point(this.coordinate._d1, this.coordinate._d2, this.coordinate._d3);}
     //public Double3 getHeadCoord() {return _head.coordinate;}
 
     // Vector Class Methods:
@@ -72,7 +72,7 @@ public class Vector extends Point{
      * @return Vector, new Vector result of invoker + otherVector
      */
     public Vector add(Vector otherVector) {
-        return new Vector(new Double3(this.coordinate.d1, this.coordinate.d2, this.coordinate.d3).add(otherVector.coordinate));
+        return new Vector(new Double3(this.coordinate._d1, this.coordinate._d2, this.coordinate._d3).add(otherVector.coordinate));
     }
     /**
      * Scaling a vector with a scalar.
@@ -98,14 +98,14 @@ public class Vector extends Point{
      * @return double result of cartesian product invoker * otherVector
      */
     public double dotProduct(Vector otherVector) {
-        double u1 = coordinate.d1;
-        double u2 = coordinate.d2;
-        double u3 = coordinate.d3;
+        double u1 = coordinate._d1;
+        double u2 = coordinate._d2;
+        double u3 = coordinate._d3;
         Double3 u = new Double3(u1, u2, u3);
 
-        double v1 = otherVector.coordinate.d1;
-        double v2 = otherVector.coordinate.d2;
-        double v3 = otherVector.coordinate.d3;
+        double v1 = otherVector.coordinate._d1;
+        double v2 = otherVector.coordinate._d2;
+        double v3 = otherVector.coordinate._d3;
         Double3 v = new Double3(v1, v2, v3);
 
         //return (u1 * v1 + u2 * v2 + u3 * v3);
@@ -119,13 +119,13 @@ public class Vector extends Point{
      * @return Vector result of cross product invoker X otherVector
      */
     public Vector crossProduct(Vector otherVector) {
-        double u1 = coordinate.d1;
-        double u2 = coordinate.d2;
-        double u3 = coordinate.d3;
+        double u1 = coordinate._d1;
+        double u2 = coordinate._d2;
+        double u3 = coordinate._d3;
 
-        double v1 = otherVector.coordinate.d1;
-        double v2 = otherVector.coordinate.d2;
-        double v3 = otherVector.coordinate.d3;
+        double v1 = otherVector.coordinate._d1;
+        double v2 = otherVector.coordinate._d2;
+        double v3 = otherVector.coordinate._d3;
         return new Vector((u2 * v3 - v2 * u3), -(u1 * v3 - v1 * u3), (u1 * v2 - v1 * u2));
     }
     /*public Vector crossProduct(Vector otherVector) {
@@ -165,20 +165,20 @@ public class Vector extends Point{
         double vectorLength = length();
 
         Vector unitVector = scale(1/ vectorLength);
-        return new Vector(new Point(unitVector.coordinate.d1, unitVector.coordinate.d2, unitVector.coordinate.d3));
+        return new Vector(new Point(unitVector.coordinate._d1, unitVector.coordinate._d2, unitVector.coordinate._d3));
     }
     /**
      * normalizing the invoking vector to be a unit vector (length = 1).
      * @return Vector new vector of length = 1 (unit vector) in the same direction of invoking vector
      */
     public Vector normalized() {
-        Vector OldVector = new Vector(this.coordinate.d1, this.coordinate.d2, this.coordinate.d3);
+        Vector OldVector = new Vector(this.coordinate._d1, this.coordinate._d2, this.coordinate._d3);
         Vector newVector = this.normalize();
         return newVector;
     }
 
     public double sumProd(Double3 do3){
-        return do3.d1 + do3.d2 + do3.d3;
+        return do3._d1 + do3._d2 + do3._d3;
     }
     /*@Override
     public boolean equals(Object obj) {

@@ -13,8 +13,8 @@ import primitives.Vector;
  */
 public class Cylinder extends Tube {
 
-	// Private members:
-	private double _height;
+	//  members:
+	 double _height;
 	
 	// Constructors:
 	/**

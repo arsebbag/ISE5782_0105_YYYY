@@ -13,7 +13,7 @@ public class Point {
      */
     public static Point ZERO = new Point(0.0,0.0,0.0);
 
-    // Private members:
+    //  member:
     final Double3 coordinate; //final
 
     // Ctors:
@@ -36,7 +36,17 @@ public class Point {
         this.coordinate = coord;
     }
 
-    // Point3D class Methods:
+    // Point class Methods:
+    public Point addToX(Double num) { // public?
+        return new Point(this.coordinate._d1 + num, this.coordinate._d2, this.coordinate._d3);
+    }
+    public Point addToY(Double num) {
+        return new Point(this.coordinate._d1, this.coordinate._d2 + num, this.coordinate._d3);
+    }
+    public Point addToZ(Double num) {
+        return new Point(this.coordinate._d1, this.coordinate._d2, this.coordinate._d3 + num);
+    }
+
 
     /**
      * Add a vector to the invoking Point3D getting a new Point3D back
@@ -68,9 +78,9 @@ public class Point {
      */
     public double distanceSquared(Point otherPoint) {
         double output, xDelta, yDelta, zDelta;
-        xDelta = coordinate.d1 - otherPoint.coordinate.d1;
-        yDelta = coordinate.d2 - otherPoint.coordinate.d2;
-        zDelta = coordinate.d3 - otherPoint.coordinate.d3;
+        xDelta = coordinate._d1 - otherPoint.coordinate._d1;
+        yDelta = coordinate._d2 - otherPoint.coordinate._d2;
+        zDelta = coordinate._d3 - otherPoint.coordinate._d3;
         output = xDelta * xDelta + yDelta * yDelta + zDelta * zDelta;
         return output;
     }

@@ -27,7 +27,10 @@ public class Plane implements Geometry {
      */
     public Plane(Point point3d, Point point3d2, Point point3d3) {
         _p = point3d;
-        _normal = null; // TODO in stage 2 implement 3 points normal calculation.
+        Vector vec1 = _p.subtract(point3d2);
+        Vector vec2 = _p.subtract(point3d3);
+        if ((vec1.crossProduct(vec2)).dotProduct(new Vector(_p)) == 0)//.normalize() -> ??
+        { _normal = (vec1.crossProduct(vec2).normalize());} // *T*O*D*O*
     }
 
     /**
@@ -53,11 +56,13 @@ public class Plane implements Geometry {
 
     /**
      * @param point in the plane
-     * @return NULL. maybe the ZERO vector   TODO in stage 2 implement 3 points normal calculation.
+     * @return ZERO vector
      */
     @Override
-    public Vector getNormal(Point point) {
-        return null; //getNormal(new Point3D(0.0,0.0,0.0));
+    public Vector getNormal(Point point) { // *T*O*D*O*
+        if ((new Vector(point).dotProduct(this._normal)) != 0)
+        {throw new IllegalArgumentException("The point is wrong");}
+        return _normal;
     }
 
     /**

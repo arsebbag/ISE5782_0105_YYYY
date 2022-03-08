@@ -22,6 +22,15 @@ public class Sphere implements Geometry { //extends RadialGeometry
 	public Sphere(double radius) {
 		//super(radius);
 		_radius = radius;
+
+	}
+
+	/**
+	 * @param radius of the Sphere.
+	 */
+	public Sphere(double radius, Point center) {
+		_radius = radius;
+		this._center = center;
 		// TODO Auto-generated constructor stub
 	}
 
@@ -31,13 +40,13 @@ public class Sphere implements Geometry { //extends RadialGeometry
 	}
 
 	/**
-	 *
-	 * @param point on the Sphere.
-	 * @return null.
-	 */
+			*
+			* @param point3d on the Sphere.
+			* @return the Normal
+			*/
 	@Override
-	public Vector getNormal(Point point) {
-		return null; // TODO in stage 2 implement 3 points normal calculation.
+	public Vector getNormal(Point point3d) {
+		return point3d.subtract(_center).normalize();
 	}
 	
 	@Override

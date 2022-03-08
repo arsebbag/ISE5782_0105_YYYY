@@ -17,14 +17,6 @@ public class Triangle extends Polygon {
 		super(point1, point2, point3);
 	}
 
-	/**
-	 * @param point on Triangle.
-	 * @return TODO in stage 2 implement 3 points normal calculation, for now its NULL.
-	 */
-	@Override
-	public Vector getNormal(Point point) {
-		return null;
-	}
 	
 	@Override
 	public String toString() {

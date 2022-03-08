@@ -10,7 +10,7 @@ package primitives;
 public class Ray {
 
     // Private members:
-    private Double3 _p0;
+    private Point _p0;
     private Vector _dir;
 
 
@@ -20,7 +20,7 @@ public class Ray {
      * @param otherPoint = starting point of ray.
      * @param unitVector = unit vector which is direction of the ray.
      */
-    public Ray(Double3 otherPoint, Vector unitVector) {
+    public Ray(Point otherPoint, Vector unitVector) {
         _dir = unitVector.normalized();
         _p0 = otherPoint;
     }
@@ -38,7 +38,7 @@ public class Ray {
      * Getter for the Point3D private field representing the start of the ray.
      * @return Point3D the start of the ray
      */
-    public Double3 get_p0() {
+    public Point get_p0() {
         return _p0;
     }
     /**

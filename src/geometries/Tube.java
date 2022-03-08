@@ -33,12 +33,14 @@ public class Tube implements Geometry { // extends RadialGeometry
 
 	/**
 	 *
-	 * @param point on the Tube.
-	 * @return NULL.
+	 * @param point3d on the Tube.
+	 * @return the Normal.
 	 */
 	@Override
-	public Vector getNormal(Point point) {
-		return null; // TODO in stage 2 implement 3 points normal calculation.
+	public Vector getNormal(Point point3d) {
+		double t = this.get_axisRay().get_dir().dotProduct(point3d.subtract(this.get_axisRay().get_p0()));
+		Point projection = this.get_axisRay().get_p0().add(this.get_axisRay().get_dir().scale(t));
+		return point3d.subtract(projection).normalize();
 	}
 	
 	@Override
