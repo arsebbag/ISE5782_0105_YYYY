@@ -37,15 +37,19 @@ public class Point {
     }
 
     // Point class Methods:
-    public Point addToX(Double num) { // public?
-        return new Point(this.coordinate._d1 + num, this.coordinate._d2, this.coordinate._d3);
+
+
+    public Double get_x(){
+        return this.coordinate._d1;
     }
-    public Point addToY(Double num) {
-        return new Point(this.coordinate._d1, this.coordinate._d2 + num, this.coordinate._d3);
+    public Double get_y(){
+        return this.coordinate._d1;
     }
-    public Point addToZ(Double num) {
-        return new Point(this.coordinate._d1, this.coordinate._d2, this.coordinate._d3 + num);
+    public Double get_z(){
+        return this.coordinate._d1;
     }
+
+
 
 
     /**
@@ -98,7 +102,7 @@ public class Point {
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        if (obj == null) return false;
+        if (obj == null || getClass() != obj.getClass()) return false; // i added something!!
         if (!(obj instanceof Point)) return false;
         Point otherPoint = (Point) obj;
         return coordinate.equals(otherPoint.coordinate);

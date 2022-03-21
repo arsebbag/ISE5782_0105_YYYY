@@ -4,7 +4,10 @@ import org.junit.jupiter.api.Test;
 import geometries.Plane;
 //import org.junit.Test;
 import primitives.Point;
+import primitives.Ray;
 import primitives.Vector;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -103,5 +106,61 @@ class PlaneTest {
         Vector expected = new Vector(1.0,0.0,0.0);
         assertEquals(expected ,(p_instance.getNormal()), "TC01: ");//((p_instance.getNormal()).dotProduct(expected)
         //assertTrue("TC01: ", ((p_instance.getNormal()).dotProduct(expected)) == 0);
+    }
+
+    /**
+     * Test method for {@link geometries.Plane#findIntersections(primitives.Ray)}.
+     */
+    @Test
+    public void testFindIntersection() {
+        // setup
+        Point q0 = new Point(1, 0, 1);
+        Vector dir = new Vector(q0);
+        Plane plane = new Plane(q0, dir);
+        Point p1 = new Point(1, 0, 0);
+        Point p2 = new Point(1.5, 0, 0.5);
+
+        // ============ Equivalence Partitions Tests ==============
+
+        // TC01: Ray's line is before and do not cross the plane (0 points)
+        assertNull(plane.findIntersections(new Ray(p1, dir.scale(-1d))), "TC01: Plane should not intersected by Ray.");
+
+        // TC02: Ray starts before and crosses the plane (1 point)
+        Ray r1 = new Ray(p1, dir);
+
+        List<Point> actualValue = plane.findIntersections(r1);
+        assertEquals(1, actualValue.size(), "TC02: The ray should intersected the Plane once.");
+
+        assertEquals(List.of(p2), actualValue, "TC02: Wrong values in the intersection point.");
+
+        // TC03: Ray starts on the plane (0 points)
+        assertNull(plane.findIntersections(new Ray(p2, dir)), "TC03: Plane should not intersected by Ray.");
+
+        // TC04: Ray starts after the plane (0 points)
+        assertNull(plane.findIntersections(new Ray(new Point(2, 0, 1), dir)),
+                "TC04: Plane should not intersected by Ray.");
+
+        // =============== Boundary Values Tests ==================
+
+        // TC05: ray starts before Plane and go through the plane at the q0 point.
+        Point p3 = new Point(-2, 0, -2);
+        Ray r2 = new Ray(p3, dir);
+        actualValue = plane.findIntersections(r2);
+        assertEquals(1, actualValue.size(),"TC05: The ray should intersected the Plane once.");
+
+        assertEquals(List.of(q0), actualValue, "TC05: Wrong values in the intersection point.");
+
+        // TC06: ray starts at the Plane at the q0 point.
+        assertNull(plane.findIntersections(new Ray(q0, dir)), "TC06: Plane should not intersected by Ray.");
+
+        // **** Group: Ray's line is orthogonal to the plane Normal
+        Vector v1 = new Vector(0, 1, 0);
+        // TC07: Ray start before the Plane (0 points)
+        assertNull(plane.findIntersections(new Ray(p3, v1)), "TC07: Plane should not intersected by Ray.");
+
+        // TC08: Ray start on the Plane (0 points)
+        assertNull(plane.findIntersections(new Ray(p2, v1)), "TC08: Plane should not intersected by Ray.");
+
+        // **** Group: Special cases
     }
 }

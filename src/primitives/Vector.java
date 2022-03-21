@@ -12,20 +12,27 @@ public class Vector extends Point{
     //Point _head;
 
     // Constructors:
+
     /**
-     * Constructor for building non zero vector from 3 double variables.
-     * @param xCoordValue = double parameter for the X Axis Coordinate.
-     * @param yCoordValue = double parameter for the Y Axis Coordinate.
-     * @param zCoordValue = double parameter for the Z Axis Coordinate.
-     * @throws if the point is the origin (0,0,0)
+     * Constructor for Vector Class.
+     *
+     * @param x - A Coordinate for the x axis in Cartesian 3-Dimensional coordinate
+     *          system.
+     * @param y - A Coordinate for the y axis in Cartesian 3-Dimensional coordinate
+     *          system.
+     * @param z - A Coordinate for the z axis in Cartesian 3-Dimensional coordinate
+     *          system.
+     *
+     * @throws IllegalArgumentException - In case of passing Zero in all parameters
+     *                                  (head is on the origin (0,0,0) of the)
+     *                                  Cartesian 3-Dimensional coordinate system.
      */
-    public Vector(double xCoordValue, double yCoordValue, double zCoordValue) {
-        super(xCoordValue, yCoordValue, zCoordValue);
-        Point newHead = new Point(xCoordValue, yCoordValue, zCoordValue);
-        if(this.coordinate.equals(Double3.ZERO)) {
-            throw new IllegalArgumentException("The point is the origin point which can not be used to describe a vector.");
+    public Vector(double x, double y, double z) {
+        super(x,y,z);
+        Point p = new Point(x, y, z);
+        if (p.equals(Point.ZERO)) {
+            throw new IllegalArgumentException("Vector can not be zero vector.");
         }
-        //_head = newHead;
     }
 
     /**
@@ -62,7 +69,6 @@ public class Vector extends Point{
     //public Point getHead() {return _head;}
 
     public Point getHead() {return new Point(this.coordinate._d1, this.coordinate._d2, this.coordinate._d3);}
-    //public Double3 getHeadCoord() {return _head.coordinate;}
 
     // Vector Class Methods:
 
@@ -79,7 +85,9 @@ public class Vector extends Point{
      * @param scalar a num to mult the vector.
      * @return Vector result of invoker * scalar
      */
-
+    public Vector scale(double scalar) {
+        return new Vector(this.coordinate.scale(scalar));
+    }
    /* //**
      * Subtract one vector from vector invoking the method.
      * @param otherVector = the vector to subtract from the invoking vector.
@@ -89,28 +97,19 @@ public class Vector extends Point{
         return new Vector(this.coordinate.subtract(otherVector.coordinate));
     }*/
 
-    public Vector scale(double scalar) {
-        return new Vector(this.coordinate.scale(scalar));
-    }
+
     /**
-     * function to get the cartesian product of two vectors.
-     * @param otherVector = is the second operand in the cartesian product
-     * @return double result of cartesian product invoker * otherVector
+     * Calculating Dot Product between This Vector and vec using algebraic equation.
+     *
+     * @param vec - a Vector Type
+     * @return double - the value of doing dot product between vec and this Vector.
      */
-    public double dotProduct(Vector otherVector) {
-        double u1 = coordinate._d1;
-        double u2 = coordinate._d2;
-        double u3 = coordinate._d3;
-        Double3 u = new Double3(u1, u2, u3);
+    public double dotProduct(Vector vec) {
+        double productX = this.coordinate._d1 * vec.coordinate._d1;
+        double productY = this.coordinate._d2 * vec.coordinate._d2;
+        double productZ = this.coordinate._d3 * vec.coordinate._d3;
 
-        double v1 = otherVector.coordinate._d1;
-        double v2 = otherVector.coordinate._d2;
-        double v3 = otherVector.coordinate._d3;
-        Double3 v = new Double3(v1, v2, v3);
-
-        //return (u1 * v1 + u2 * v2 + u3 * v3);
-        return sumProd(u.product(v));
-
+        return productX + productY + productZ;
     }
 
     /**
@@ -150,6 +149,7 @@ public class Vector extends Point{
     public double lengthSquared() {
         return this.distanceSquared(Point.ZERO);
     }
+
     /**
      * calculate the length of the invoking vector
      * @return double result of |invoker| (|v|)
@@ -157,16 +157,21 @@ public class Vector extends Point{
     public double length() {
         return this.distance(Point.ZERO);
     }
+
     /**
      * normalizing the invoking vector to be a unit vector (length = 1).
      * @return Vector the invoker after normalizing it (this)
      */
     public Vector normalize() {
+        double len = length();
+        return new Vector(coordinate.reduce(len));
+    }
+    /*public Vector normalize() {
         double vectorLength = length();
 
         Vector unitVector = scale(1/ vectorLength);
         return new Vector(new Point(unitVector.coordinate._d1, unitVector.coordinate._d2, unitVector.coordinate._d3));
-    }
+    }*/
     /**
      * normalizing the invoking vector to be a unit vector (length = 1).
      * @return Vector new vector of length = 1 (unit vector) in the same direction of invoking vector

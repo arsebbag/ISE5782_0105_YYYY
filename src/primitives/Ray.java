@@ -1,5 +1,7 @@
 package primitives;
 
+import static primitives.Util.isZero;
+
 /**
  * Ray  class represents 3D ray in 3D Cartesian coordinate system.
  * using a {@link Double3} point as starting point and direction using {@link Vector} unit vector .
@@ -49,6 +51,21 @@ public class Ray {
         return _dir;
     }
 
+
+    /**
+     * get the Point3D on the Ray that is in distance of t from Ray starting Point3D
+     * (p0).
+     *
+     * @param t distance to reach new point
+     * @return Point - point on Ray axis with distance of t from Ray origin
+     *         point(p0).
+     */
+    public Point getPoint(double t) {
+        if(isZero(t)){
+            throw new IllegalArgumentException("if t = 0 that cause a new zero vector");
+        }
+        return _p0.add(_dir.scale(t));
+    }
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;

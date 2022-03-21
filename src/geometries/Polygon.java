@@ -88,4 +88,49 @@ public class Polygon implements Geometry {
 	public Vector getNormal(Point point) {
 		return plane.getNormal(point);
 	}
+
+	/**
+	 * check for intersections points with the polygon and returned them, the algorithm is details inside the block
+	 * @param ray - a Ray that try to find intersection with the shape.
+	 * @return List of points intersection with the polygon
+	 */
+	@Override
+	public List<Point> findIntersections(Ray ray) {
+		List<Point> tentativeIntersection = plane.findIntersections(ray);
+		// if we do not intersect with plane we can not possibly intersect the triangle.
+		if (tentativeIntersection == null) {
+			return null;
+		}
+		// algorithm to test if given point P we got from plane findIntersections is
+		// inside the triangle.
+		Point p0 = ray.get_p0();
+		Vector v = ray.get_dir();
+		int size = _vertices.size();
+		Vector[] vectorsToP0 = new Vector[size];
+		Vector[] crossVectors = new Vector[size];
+		for (int i = 0; i < size; i++) {
+			vectorsToP0[i] = (_vertices.get(i).subtract(p0));
+		}
+		for (int i = 0; i < size; i++) {
+			crossVectors[i] = vectorsToP0[i].crossProduct(vectorsToP0[(i + 1) % size]).normalize();
+		}
+		int numOfPositiveNumbers = 0;
+		for (Vector vector : crossVectors) {
+			double vn = v.dotProduct(vector);
+			if (isZero(vn)) {
+				return null;
+			}
+			if (vn > 0) {
+				numOfPositiveNumbers++;
+			}
+		}
+
+		// if numOfPositiveNumbers is not 0 or size(number of vertices) it's mean there
+		// is at least 1 number with odd sign.
+		if (numOfPositiveNumbers != 0 && numOfPositiveNumbers != size) {
+			return null;
+		}
+
+		return tentativeIntersection;
+	}
 }

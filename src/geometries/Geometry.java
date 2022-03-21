@@ -7,10 +7,10 @@ import primitives.Vector;
  * Interface Geometry is an interface all geometries shapes implement.
  * The methods in the interface:
  * - getNormal(Point): Vector
- * @author ariel sebbag
+ * @author Ariel sebbag
  *
  */
-public interface Geometry {
+public interface Geometry extends Intersectable{
 
     Vector getNormal(Point point);
 }

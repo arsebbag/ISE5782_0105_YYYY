@@ -32,8 +32,18 @@ class VectorTest {
         }catch(IllegalArgumentException e) {}
     }
 
+    /**
+     * This test is for checking that the getter for head field working properly.
+     */
     @Test
-    void testGetHead() {
+    public void testGetHead() {
+        // ============ Equivalence Partitions Tests ==============
+        // TC01: Correct head point3D of Vector is returned via Getter.
+        Point expected = new Point(1.0, 1.0, 1.0);
+        Vector vector = new Vector(1.0, 1.0, 1.0);
+        Point actualValue = vector.getHead();
+
+        assertEquals(expected, actualValue, "Should give back head: (1,1,1)");
     }
 
     @Test
@@ -153,28 +163,21 @@ class VectorTest {
     }
 
     /**
-     * Test method for {@link primitives.Vector#normalize()}.
+     * Test method for {@link Vector#normalize()}.
      */
     @Test
     public void testNormalize() {
         // ============ Equivalence Partitions Tests ==============
-        //TC01: test that normalize a vector.
-        Vector v1 = new Vector(2.5, 4.75, 8.0);
+        // TC01: Testing Normalize
+        Vector vector = new Vector(1, 2, 3);
+        Vector vectorCopy = new Vector(vector.getHead());
+        Vector normalizeVectorCopy = vectorCopy.normalize();
 
-        //assertEquals("Length before normalize! ", 1, v1.length(), 0.0001);
+        //assertTrue(vectorCopy.equals(normalizeVectorCopy), "normalize() function should not create a new vector");
 
-        v1.normalize();
-        assertEquals(1, v1.length(), 0.0001, "Incorrect length after normalize! ");
+        boolean unitVectorLengthOK = isZero(normalizeVectorCopy.length() - 1);
+        assertTrue(unitVectorLengthOK, "normalize() result is not a unit vector");
 
-        // =============== Boundary Values Tests ==================
-        // TC : wrong - problem with the Origin Point (0, 0, 0).
-        try {
-            Vector v2 = new Vector(Double3.ZERO);
-            v2.normalize();
-            fail("Didn't throw divide by zero exception!");
-        } catch (IllegalArgumentException e) {
-            assertTrue(true);
-        }
     }
 
     /**

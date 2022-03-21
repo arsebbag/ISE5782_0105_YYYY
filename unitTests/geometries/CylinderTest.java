@@ -40,8 +40,8 @@ class CylinderTest {
 
         // TC02: Test getNormal of Cylinder in first base. - not sure is ok
         // two point that are on the same plane of the "circle" base in on.
-        Point firstPoint =  p0.addToY(cylinder._radius);//new Point(p0.);//p0.x, p0.y.coord + cylinder._radius, p0.z.coord
-        Point secondPoint = p0.addToX(cylinder._radius);
+        Point firstPoint = new Point(p0.get_x(), p0.get_y() + cylinder._radius, p0.get_z());
+        Point secondPoint = new Point(p0.get_x() + cylinder._radius, p0.get_y(), p0.get_z());
 
         Vector v1 = firstPoint.subtract(p0);
         Vector v2 = secondPoint.subtract(p0);
@@ -55,8 +55,8 @@ class CylinderTest {
 
         // TC03: Test getNormal of Cylinder in second base.
         // two point that are on the same plane of the "circle" base in on.
-        firstPoint = p0.addToY(cylinder._radius).addToZ(cylinder._height);
-        secondPoint = p0.addToX(cylinder._radius).addToZ(cylinder._height);
+        firstPoint = new Point(p0.get_x(), p0.get_y() + cylinder._radius, p0.get_z() + cylinder._height);
+        secondPoint = new Point(p0.get_x() + cylinder._radius, p0.get_y(), p0.get_z() + cylinder._height);
 
         // p1 is the center of the second circular "base".
         Point p1 = p0.add(cylinder.get_axisRay().get_dir().scale(cylinder._height));
