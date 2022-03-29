@@ -12,7 +12,7 @@ import primitives.Vector;
 /**
  * Testing eometries.
  *
- * @author Ariel Sebbag
+ * @author SHAI FALACH and RON HAIM HODADEDI
  */
 public class GeometriesTests {
     /**
