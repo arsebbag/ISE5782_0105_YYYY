@@ -21,10 +21,10 @@ class SphereTest {
         /**
          * Test method for {@link geometries.Sphere# Sphere(double, Point)}.
          */
-        @Test
+        /*@Test
         public void testSphere() {
             fail("Not yet implemented");
-        }
+        }*/
 
 
 

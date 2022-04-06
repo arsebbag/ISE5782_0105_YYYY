@@ -1,5 +1,6 @@
 package renderer;
 
+import primitives.Color;
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
@@ -8,6 +9,7 @@ import static primitives.Util.*;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.MissingResourceException;
 import java.util.stream.Collectors;
 
 /**
@@ -17,9 +19,21 @@ import java.util.stream.Collectors;
  * @author Ariel Sebbag
  */
 public class Camera {
+
+    //fields
+
     private Point _p0;
     private Vector _vTo, _vUp, _vRight;
     private double _width, _height, _distance;
+    private ImageWriter ImageWriter;
+    private RayTracerBasic RayTracer;
+
+    //ERROR messages
+    private static final String RESOURCE_ERROR = "Renderer resource not set";
+    private static final String RENDER_CLASS = "Render";
+    private static final String IMAGE_WRITER_COMPONENT = "Image writer";
+    private static final String CAMERA_COMPONENT = "Camera";
+    private static final String RAY_TRACER_COMPONENT = "Ray tracer";
 
     /**
      * Only Constructor for Camera. must given position and 
@@ -75,6 +89,16 @@ public class Camera {
      */
     public Vector getVRight() {
         return _vRight;
+    }
+
+    public Camera setImageWriter(renderer.ImageWriter imageWriter) {
+        ImageWriter = imageWriter;
+        return this;
+    }
+
+    public Camera setRayTracer(RayTracerBasic rayTracer) {
+        RayTracer = rayTracer;
+        return this;
     }
 
     /**
@@ -288,4 +312,42 @@ public class Camera {
     }
 
 
+    /**
+     * This function renders image's pixel color map from the scene included with
+     * the Renderer object
+     */
+    public void renderImage() {
+        if (ImageWriter == null)
+            throw new MissingResourceException(RESOURCE_ERROR, RENDER_CLASS, IMAGE_WRITER_COMPONENT);
+        if (this == null)
+            throw new MissingResourceException(RESOURCE_ERROR, RENDER_CLASS, CAMERA_COMPONENT);
+        if (RayTracer == null)
+            throw new MissingResourceException(RESOURCE_ERROR, RENDER_CLASS, RAY_TRACER_COMPONENT);
+
+        throw new UnsupportedOperationException();
+    }
+
+
+    /**
+     * Create a grid [over the picture] in the pixel color map. given the grid's
+     * interval and color.
+     *
+     * @param interval  grid's step
+     * @param color grid's color
+     */
+    public void printGrid(int interval, Color color) {
+
+        for (int i = 0; i < ImageWriter.getNx(); i++) {
+            for (int j = 0; j < ImageWriter.getNy(); j++) {
+                if (i % interval == 0 || j % interval == 0) {
+                    ImageWriter.writePixel(i, j, color);
+                }
+            }
+        }
+
+    }
+
+    public void writeToImage() {
+        ImageWriter.writeToImage();
+    }
 }

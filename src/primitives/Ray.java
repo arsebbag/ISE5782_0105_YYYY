@@ -1,5 +1,7 @@
 package primitives;
 
+import java.util.List;
+
 import static primitives.Util.isZero;
 
 /**
@@ -26,14 +28,6 @@ public class Ray {
         _dir = unitVector.normalized();
         _p0 = otherPoint;
     }
- /*   *//**
-     * Constructor to build Ray using another ray (copy constructor).
-     * @param otherRay = other Ray to copy data from.
-     *//*
-    public Ray(Ray otherRay) {
-        _p0 = otherRay.get_p0();
-        _dir = otherRay.get_dir();
-    }*/
 
     // Getters:
     /**
@@ -65,6 +59,31 @@ public class Ray {
             throw new IllegalArgumentException("if t = 0 that cause a new zero vector");
         }
         return _p0.add(_dir.scale(t));
+    }
+
+    /**
+     * find the closest Point to Ray
+     *
+     * @param points3DList List of intersections point
+     * @return the closest point
+     */
+    public Point findClosestPoint(List<Point> points3DList) {
+        double distance = Double.POSITIVE_INFINITY;
+        Point nearPoint = null;
+
+        if (points3DList == null) {
+            return null;
+        }
+
+        for (Point p : points3DList) {
+            double dis = p.distance(_p0); // distance from the starting point of the ray
+            if (dis < distance) {
+                distance = dis;
+                nearPoint = p;
+            }
+        }
+
+        return nearPoint;
     }
     @Override
     public boolean equals(Object obj) {

@@ -94,11 +94,15 @@ public class Plane implements Geometry {
         double c = headPoint.getCoordinateZ().get();
         double d = new Vector(_p).dotProduct(_normal);*/
         double d = new Vector(_p).dotProduct(_normal);
-        return String.format("the Plane Equsion is: %.2fx + %.2fb", headPoint.toString(), d);
+        return String.format("the Plane Equsion is: %.2fx + %s", headPoint.toString(), d);
         //return String.format("the Plane Equasion is: %.2fx + %.2fb + $.2fc = %.2f", a, b, c, d);
 
     }
 
+    /**
+     * @param ray   - ray that cross the geometry
+     * @return list of intersection points that were found
+     */
     @Override
     public List<Point> findIntersections(Ray ray) {
         double nv = this._normal.dotProduct(ray.get_dir());
@@ -115,4 +119,6 @@ public class Plane implements Geometry {
         return null;
 
     }
+
+
 }
