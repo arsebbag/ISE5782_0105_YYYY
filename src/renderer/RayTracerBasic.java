@@ -12,7 +12,7 @@ import static primitives.Util.*;
 /**
  * class used to trace rays for the rendering engine
  */
-public class RayTracerBasic extends RayTracerBase {
+public class RayTracerBasic extends RayTracer {
 
     /**
      * how many reflections we want to calculate - The maximum value of the tree height (number of intersections) for reflection/refraction calculations for a geometry the camera sees.
@@ -78,7 +78,7 @@ public class RayTracerBasic extends RayTracerBase {
         Point closestPoint = findClosestIntersection(ray);
 
         if (closestPoint == null) {
-            return _scene.getBackground();
+            return scene.getBackground();
         }
 
         return calcColor(closestPoint);
@@ -96,9 +96,9 @@ public class RayTracerBasic extends RayTracerBase {
         List<Point> intersections;
 
         if (!_bb) {
-            intersections = _scene.getGeometries().findIntersections(ray);
+            intersections = scene.getGeometries().findIntersections(ray);
         } else {
-            intersections = _scene.getGeometries().findIntersections(ray);
+            intersections = scene.getGeometries().findIntersections(ray);
         }
 
         if (intersections == null || intersections.size() == 0) {
@@ -116,7 +116,7 @@ public class RayTracerBasic extends RayTracerBase {
      * @return the color in the point
      */
     private Color calcColor(Point point) {
-        return null;//new Color();
+        return scene.getAmbientLight().getIntensity();
     }
 
 }

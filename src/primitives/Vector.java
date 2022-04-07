@@ -172,15 +172,6 @@ public class Vector extends Point{
         Vector unitVector = scale(1/ vectorLength);
         return new Vector(new Point(unitVector.coordinate._d1, unitVector.coordinate._d2, unitVector.coordinate._d3));
     }*/
-    /**
-     * normalizing the invoking vector to be a unit vector (length = 1).
-     * @return Vector new vector of length = 1 (unit vector) in the same direction of invoking vector
-     */
-    public Vector normalized() {
-        Vector OldVector = new Vector(this.coordinate._d1, this.coordinate._d2, this.coordinate._d3);
-        Vector newVector = this.normalize();
-        return newVector;
-    }
 
     public double sumProd(Double3 do3){
         return do3._d1 + do3._d2 + do3._d3;

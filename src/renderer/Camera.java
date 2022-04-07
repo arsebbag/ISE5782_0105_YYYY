@@ -22,11 +22,11 @@ public class Camera {
 
     //fields
 
-    private Point _p0;
-    private Vector _vTo, _vUp, _vRight;
-    private double _width, _height, _distance;
-    private ImageWriter ImageWriter;
-    private RayTracerBasic RayTracer;
+    private Point p0;
+    private Vector vTo, vUp, vRight;
+    private double width, height, distance;
+    private ImageWriter imageWriter;
+    private RayTracer rayTracer;
 
     //ERROR messages
     private static final String RESOURCE_ERROR = "Renderer resource not set";
@@ -40,18 +40,18 @@ public class Camera {
      * 2 directions(forward and
      * up).
      *
-     * @param camPos - Point3D A position for the camera.
-     * @param camVTo - Vector The forward vector direction.
-     * @param camVUp - Vector The upward vector direction.
+     * @param p0 - Point3D A position for the camera.
+     * @param vTo - Vector The forward vector direction.
+     * @param vUp - Vector The upward vector direction.
      */
-    public Camera(Point camPos, Vector camVTo, Vector camVUp) {
-        _p0 = camPos;
-        if (!isZero(camVTo.dotProduct(camVUp))) {
+    public Camera(Point p0, Vector vTo, Vector vUp) {
+        this.p0 = p0;
+        if (!isZero(vTo.dotProduct(vUp))) {
             throw new IllegalArgumentException("The Vectors supplied should be orthogonal to each other");
         }
-        _vTo = camVTo.normalized();
-        _vUp = camVUp.normalized();
-        _vRight = _vTo.crossProduct(_vUp).normalize();
+        this.vTo = vTo.normalize();
+        this.vUp = vUp.normalize();
+        vRight = this.vTo.crossProduct(this.vUp);
     }
 
 
@@ -60,8 +60,8 @@ public class Camera {
      *
      * @return {@link Point}
      */
-    public Point get_p0() {
-        return _p0;
+    public Point getP0() {
+        return p0;
     }
 
     /**
@@ -70,7 +70,7 @@ public class Camera {
      * @return {@link Vector}
      */
     public Vector getVTo() {
-        return _vTo;
+        return vTo;
     }
 
     /**
@@ -79,7 +79,7 @@ public class Camera {
      * @return {@link Vector}
      */
     public Vector getVUp() {
-        return _vUp;
+        return vUp;
     }
 
     /**
@@ -88,31 +88,31 @@ public class Camera {
      * @return {@link Vector}
      */
     public Vector getVRight() {
-        return _vRight;
+        return vRight;
     }
 
     public Camera setImageWriter(renderer.ImageWriter imageWriter) {
-        ImageWriter = imageWriter;
+        this.imageWriter = imageWriter;
         return this;
     }
 
     public Camera setRayTracer(RayTracerBasic rayTracer) {
-        RayTracer = rayTracer;
+        this.rayTracer = rayTracer;
         return this;
     }
 
     /**
      * @return the height
      */
-    public double get_height() {
-        return _height;
+    public double getHeight() {
+        return height;
     }
 
     /**
      * @return the width
      */
-    public double get_width() {
-        return _width;
+    public double getWidth() {
+        return width;
     }
 
     /**
@@ -123,8 +123,8 @@ public class Camera {
      * @return - Camera (self)
      */
     public Camera setVPSize(double width, double height) {
-        this._width = width;
-        this._height = height;
+        this.width = width;
+        this.height = height;
         return this;
     }
 
@@ -135,7 +135,7 @@ public class Camera {
      * @return - Camera (self)
      */
     public Camera setVPDistance(double distance) {
-        _distance = distance;
+        this.distance = distance;
         return this;
     }
 
@@ -150,20 +150,20 @@ public class Camera {
      */
     public Ray constructRay(int nX, int nY, int j, int i) { // name was: constructRayThroughPixel
 
-        double rX = alignZero(_width / nX);
-        double rY = alignZero(_height / nY);
-        Point pc = _p0.add(_vTo.scale(_distance));
+        double rX = alignZero(width / nX);
+        double rY = alignZero(height / nY);
+        Point pc = p0.add(vTo.scale(distance));
 
         double yI = alignZero((((nY - 1) / 2d) - i) * rY);
         double xJ = alignZero((j - ((nX - 1) / 2d)) * rX);
 
         Point pIJ = pc;
         if (xJ != 0)
-            pIJ = pIJ.add(_vRight.scale(xJ));
+            pIJ = pIJ.add(vRight.scale(xJ));
         if (yI != 0)
-            pIJ = pIJ.add(_vUp.scale(yI));
+            pIJ = pIJ.add(vUp.scale(yI));
 
-        return new Ray(_p0, pIJ.subtract(_p0));
+        return new Ray(p0, pIJ.subtract(p0));
     }
 
     /**
@@ -175,10 +175,10 @@ public class Camera {
      * @return self return for more mutations.
      */
     public Camera moveCamera(Point newPos, Point lookAtPoint) {
-        _p0 = newPos;
-        _vTo = lookAtPoint.subtract(_p0).normalize();
-        _vUp = _vTo.crossProduct(new Vector(1, 0, 0)).normalize();
-        _vRight = _vTo.crossProduct(_vUp).normalize();
+        p0 = newPos;
+        vTo = lookAtPoint.subtract(p0).normalize();
+        vUp = vTo.crossProduct(new Vector(1, 0, 0)).normalize();
+        vRight = vTo.crossProduct(vUp).normalize();
         return this;
     }
 
@@ -192,16 +192,16 @@ public class Camera {
         double cosT = Math.cos(Math.toRadians(angleInDeg));
         double sinT = Math.sin(Math.toRadians(angleInDeg));
 
-        double kvOneMinusCosT = _vTo.dotProduct(_vUp) * (1 - cosT);
+        double kvOneMinusCosT = vTo.dotProduct(vUp) * (1 - cosT);
         Point rotatedVectorHead = Point.ZERO;
         if (!isZero(cosT)) {
-            rotatedVectorHead = rotatedVectorHead.add(_vUp.scale(cosT));
+            rotatedVectorHead = rotatedVectorHead.add(vUp.scale(cosT));
         }
         if (!isZero(sinT)) {
-            rotatedVectorHead = rotatedVectorHead.add(_vTo.crossProduct(_vUp).scale(sinT));
+            rotatedVectorHead = rotatedVectorHead.add(vTo.crossProduct(vUp).scale(sinT));
         }
         if (!isZero(kvOneMinusCosT)) {
-            rotatedVectorHead = rotatedVectorHead.add(_vTo.scale(kvOneMinusCosT));
+            rotatedVectorHead = rotatedVectorHead.add(vTo.scale(kvOneMinusCosT));
         }
         return new Vector(rotatedVectorHead).normalize();
     }
@@ -213,8 +213,8 @@ public class Camera {
      * @return self return for more mutations.
      */
     public Camera rotateCameraCounterClockWise(double angleInDeg) {
-        _vUp = rotateVUpByVTo(angleInDeg);
-        _vRight = _vTo.crossProduct(_vUp).normalize();
+        vUp = rotateVUpByVTo(angleInDeg);
+        vRight = vTo.crossProduct(vUp).normalize();
         return this;
     }
 
@@ -225,8 +225,8 @@ public class Camera {
      * @return self return for more mutations.
      */
     public Camera rotateCameraClockWise(double angleInDeg) {
-        _vUp = rotateVUpByVTo(-angleInDeg);
-        _vRight = _vTo.crossProduct(_vUp).normalize();
+        vUp = rotateVUpByVTo(-angleInDeg);
+        vRight = vTo.crossProduct(vUp).normalize();
         return this;
     }
 
@@ -245,24 +245,24 @@ public class Camera {
             return false;
         }
         Camera camera = (Camera) obj;
-        return _p0.equals(camera._p0) && _vTo.equals(camera._vTo) && _vUp.equals(camera._vUp)
-                && _vRight.equals(camera._vRight) && _width == camera._width && _height == camera._height
-                && _distance == camera._distance;
+        return p0.equals(camera.p0) && vTo.equals(camera.vTo) && vUp.equals(camera.vUp)
+                && vRight.equals(camera.vRight) && width == camera.width && height == camera.height
+                && distance == camera.distance;
     }
 
     public Ray constructRayThroughPixel(Point point) {
-        return new Ray(_p0, point.subtract(_p0));
+        return new Ray(p0, point.subtract(p0));
     }
 
     public List<Ray> createGridCameraRays(List<Point> points) {
-        return points.stream().parallel().map(point -> new Ray(_p0, point.subtract(_p0)))
+        return points.stream().parallel().map(point -> new Ray(p0, point.subtract(p0)))
                 .collect(Collectors.toList());
     }
 
     public List<Point> calculatePoints(int nx, int ny, int j, int i, int gridSize) {
         // pixel size
-        double rX = alignZero(_width / nx);
-        double rY = alignZero(_height / ny);
+        double rX = alignZero(width / nx);
+        double rY = alignZero(height / ny);
 
         int halfGrid = Math.floorDiv(gridSize, 2);
         // interval between 2 points in the sub grid
@@ -270,13 +270,13 @@ public class Camera {
         double yInterval = rY / gridSize;
 
         Ray centerRay = constructRay(nx, ny, j, i);
-        Point center = _p0.add(centerRay.get_dir().scale(_distance));
+        Point center = p0.add(centerRay.get_dir().scale(distance));
         List<Point> points = new LinkedList<>();
 
         for (int row = -halfGrid; row < gridSize; row++) {
             for (int col = -halfGrid; col < gridSize; col++) {
-                Point gridPij = isZero(col * xInterval) ? center : center.add(_vRight.scale(col * xInterval));
-                gridPij = isZero(row * yInterval) ? gridPij : gridPij.add(_vUp.scale(row * yInterval));
+                Point gridPij = isZero(col * xInterval) ? center : center.add(vRight.scale(col * xInterval));
+                gridPij = isZero(row * yInterval) ? gridPij : gridPij.add(vUp.scale(row * yInterval));
                 points.add(gridPij);
             }
         }
@@ -288,27 +288,27 @@ public class Camera {
 
     public List<Point> pixelCorners(int nx, int ny, Point center) {
         // pixel size
-        double rX = alignZero((_width / nx) / 2);
-        double rY = alignZero((_height / ny) / 2);
+        double rX = alignZero((width / nx) / 2);
+        double rY = alignZero((height / ny) / 2);
 
-        return List.of(center.add(_vUp.scale(-rY)).add(_vRight.scale(-rX)),
-                center.add(_vUp.scale(-rY)).add(_vRight.scale(rX)), center.add(_vUp.scale(rY)).add(_vRight.scale(-rX)),
-                center.add(_vUp.scale(rY)).add(_vRight.scale(rX)));
+        return List.of(center.add(vUp.scale(-rY)).add(vRight.scale(-rX)),
+                center.add(vUp.scale(-rY)).add(vRight.scale(rX)), center.add(vUp.scale(rY)).add(vRight.scale(-rX)),
+                center.add(vUp.scale(rY)).add(vRight.scale(rX)));
     }
 
     public List<Point> getNewCenters(int nx, int ny, List<Point> pixelCorners) {
         // pixel size
-        double rX = alignZero((_width / nx) / 4);
-        double rY = alignZero((_height / ny) / 4);
+        double rX = alignZero((width / nx) / 4);
+        double rY = alignZero((height / ny) / 4);
 
-        return List.of(pixelCorners.get(0).add(_vUp.scale(rY)).add(_vRight.scale(rX)),
-                pixelCorners.get(1).add(_vUp.scale(rY)).add(_vRight.scale(-rX)),
-                pixelCorners.get(2).add(_vUp.scale(-rY)).add(_vRight.scale(rX)),
-                pixelCorners.get(3).add(_vUp.scale(-rY)).add(_vRight.scale(-rX)));
+        return List.of(pixelCorners.get(0).add(vUp.scale(rY)).add(vRight.scale(rX)),
+                pixelCorners.get(1).add(vUp.scale(rY)).add(vRight.scale(-rX)),
+                pixelCorners.get(2).add(vUp.scale(-rY)).add(vRight.scale(rX)),
+                pixelCorners.get(3).add(vUp.scale(-rY)).add(vRight.scale(-rX)));
     }
 
     public Point getPixel(Ray centerRay) {
-        return _p0.add(centerRay.get_dir().scale(_distance));
+        return p0.add(centerRay.get_dir().scale(distance));
     }
 
 
@@ -317,14 +317,27 @@ public class Camera {
      * the Renderer object
      */
     public void renderImage() {
-        if (ImageWriter == null)
+        int Nx = imageWriter.getNx();
+        int Ny = imageWriter.getNy();
+
+        if (imageWriter == null)
             throw new MissingResourceException(RESOURCE_ERROR, RENDER_CLASS, IMAGE_WRITER_COMPONENT);
         if (this == null)
             throw new MissingResourceException(RESOURCE_ERROR, RENDER_CLASS, CAMERA_COMPONENT);
-        if (RayTracer == null)
+        if (rayTracer == null)
             throw new MissingResourceException(RESOURCE_ERROR, RENDER_CLASS, RAY_TRACER_COMPONENT);
-
+        for (int row = 0; row < Ny; row++) {
+            for (int col   = 0; col < Nx; col++) {
+                castRay(Nx,Ny,row,col);
+            }
+        }
         throw new UnsupportedOperationException();
+    }
+
+    private void castRay(int nx, int ny, int row, int col) {
+        Ray  ray = constructRay(nx,ny,row,col);
+        Color color = rayTracer.traceRay(ray);
+        imageWriter.writePixel(col,row,color);
     }
 
 
@@ -337,10 +350,10 @@ public class Camera {
      */
     public void printGrid(int interval, Color color) {
 
-        for (int i = 0; i < ImageWriter.getNx(); i++) {
-            for (int j = 0; j < ImageWriter.getNy(); j++) {
+        for (int i = 0; i < imageWriter.getNy(); i++) {
+            for (int j = 0; j < imageWriter.getNy(); j++) {
                 if (i % interval == 0 || j % interval == 0) {
-                    ImageWriter.writePixel(i, j, color);
+                    imageWriter.writePixel(i, j, color);
                 }
             }
         }
@@ -348,6 +361,6 @@ public class Camera {
     }
 
     public void writeToImage() {
-        ImageWriter.writeToImage();
+        imageWriter.writeToImage();
     }
 }
